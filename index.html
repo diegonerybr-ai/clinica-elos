@@ -1375,7 +1375,20 @@ async function _fbSyncDown() {
 }
 
 async function fbInit() {
-  const cfg_fb = _lsGet('firebase_config');
+  // Config Firebase da Clínica Elos (já configurado!)
+  const cfg_embutida = {
+  apiKey: "AIzaSyANpogsrzyQ_bpsZydpruH8OGg0IlT0Glk",
+  authDomain: "clinica-elos.firebaseapp.com",
+  projectId: "clinica-elos",
+  storageBucket: "clinica-elos.firebasestorage.app",
+  messagingSenderId: "636180119896",
+  appId: "1:636180119896:web:b825f48f5632b4cfb8a52d"
+};
+  // Salvar no localStorage se ainda não tiver
+  if (!_lsGet('firebase_config') || !_lsGet('firebase_config').apiKey) {
+    _lsSet('firebase_config', cfg_embutida);
+  }
+  const cfg_fb = _lsGet('firebase_config') || cfg_embutida;
   if (!cfg_fb || !cfg_fb.apiKey) { _fbStatus('none'); return; }
   try {
     _fbStatus('connecting');
