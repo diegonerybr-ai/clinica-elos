@@ -529,6 +529,43 @@ input[type="text"],input:not([type]),textarea { text-transform:uppercase; }
       Primeira vez? Senha padrão: <strong style="color:#1a6b4a">elos2024</strong><br>
       Altere em ⚙️ Configurações após entrar.
     </div>
+
+    <!-- Link esqueci a senha -->
+    <div style="margin-top:14px">
+      <span onclick="loginMostrarReset()" style="font-size:.72rem;color:#a0aec0;cursor:pointer;text-decoration:underline;text-underline-offset:2px;">
+        Esqueci minha senha / Redefinir
+      </span>
+    </div>
+
+    <!-- Painel de reset (oculto por padrão) -->
+    <div id="login-reset-painel" style="display:none;margin-top:16px;background:#f7fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:16px;text-align:left;">
+      <div style="font-size:.78rem;font-weight:700;color:#4a5568;margin-bottom:10px;">🔑 Redefinir senha</div>
+      <div style="font-size:.73rem;color:#718096;margin-bottom:10px;line-height:1.5;">
+        Digite o código de recuperação e escolha uma nova senha.<br>
+        Código padrão de recuperação: <strong style="color:#1a6b4a;font-family:monospace">ELOS-RESET</strong>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <input type="text" id="reset-codigo" placeholder="Código de recuperação"
+          style="width:100%;padding:9px 13px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:.85rem;font-family:monospace;outline:none;box-sizing:border-box;"
+          onfocus="this.style.borderColor='#1a6b4a'" onblur="this.style.borderColor='#e2e8f0'">
+        <input type="password" id="reset-nova" placeholder="Nova senha (mín. 4 caracteres)"
+          style="width:100%;padding:9px 13px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:.85rem;outline:none;box-sizing:border-box;"
+          onfocus="this.style.borderColor='#1a6b4a'" onblur="this.style.borderColor='#e2e8f0'">
+        <input type="password" id="reset-conf" placeholder="Confirmar nova senha"
+          style="width:100%;padding:9px 13px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:.85rem;outline:none;box-sizing:border-box;"
+          onfocus="this.style.borderColor='#1a6b4a'" onblur="this.style.borderColor='#e2e8f0'">
+        <div id="reset-erro" style="display:none;color:#e53e3e;font-size:.73rem;background:#fff5f5;border-radius:6px;padding:6px 10px;"></div>
+        <div id="reset-ok" style="display:none;color:#276749;font-size:.73rem;background:#f0fff4;border-radius:6px;padding:6px 10px;"></div>
+        <div style="display:flex;gap:8px;margin-top:2px;">
+          <button onclick="loginResetConfirmar()" style="flex:1;padding:9px;background:#1a6b4a;color:#fff;border:none;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:inherit;">
+            Redefinir
+          </button>
+          <button onclick="loginFecharReset()" style="flex:1;padding:9px;background:#e2e8f0;color:#4a5568;border:none;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit;">
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -2599,14 +2636,6 @@ function cfgAlterarSenha() {
   alert('✅ Senha alterada com sucesso!\nUse a nova senha da próxima vez que o sistema bloquear.');
 }
 
-  if (!_fbReady) {
-    await fbInit();
-  } else {
-    _fbStatus('online');
-  }
-  fbCarregar();
-}
-
 /* ═══ BACKUP ═══ */
 function exportarDados() {
   const keys=['pacientes','prontuarios','agenda','financeiro','pn_pacs','pu_pacs','rx_hist','rel_hist','config'];
@@ -3229,18 +3258,32 @@ document.getElementById('mfin-data').value=hoje();
    SISTEMA DE LOGIN E BLOQUEIO AUTOMÁTICO
 ═══════════════════════════════════════════ */
 const SENHA_PADRAO = 'elos2024';
+const CODIGO_RESET = 'ELOS-RESET';
 let _bloqueioTimer = null;
-const TEMPO_BLOQUEIO = 10 * 60 * 1000; // 10 minutos de inatividade
+const TEMPO_BLOQUEIO_PADRAO = 10 * 60 * 1000; // 10 minutos
+
+// ── Obtém tempo de bloqueio configurado (ou padrão) ──
+function _getTempoBloqueio() {
+  const salvo = _lsGet('tempo_bloqueio');
+  if (salvo && !isNaN(salvo) && salvo > 0) return salvo * 60 * 1000;
+  return TEMPO_BLOQUEIO_PADRAO;
+}
+
+// ── Obtém senha vigente (personalizada ou padrão) ──
+function _getSenhaVigente() {
+  try {
+    const salva = _lsGet('senha_acesso');
+    if (salva && typeof salva === 'string' && salva.length >= 4) return salva;
+  } catch(e) {}
+  return SENHA_PADRAO;
+}
 
 // ── Verifica se já está logado nesta sessão ──
 function loginVerificar() {
-  // Tela de login começa sempre visível (display:flex no HTML)
-  // Só libera se tiver sessão ativa
   const logado = sessionStorage.getItem('elos_logado');
   if (logado === '1') {
     loginLiberar();
   } else {
-    // Garantir que está visível e focar no campo
     const tela = document.getElementById('tela-login');
     if (tela) tela.style.display = 'flex';
     setTimeout(() => {
@@ -3260,12 +3303,13 @@ function loginVerificar() {
 function loginEntrar() {
   const campo = document.getElementById('login-senha');
   const digitada = campo.value;
-  const senhaSalva = _lsGet('senha_acesso') || SENHA_PADRAO;
+  const senhaCorreta = _getSenhaVigente();
 
-  if (digitada === senhaSalva) {
+  if (digitada === senhaCorreta) {
     sessionStorage.setItem('elos_logado','1');
     document.getElementById('login-erro').style.display = 'none';
     campo.value = '';
+    loginFecharReset();
     loginLiberar();
     _reiniciarBloqueio();
   } else {
@@ -3298,6 +3342,7 @@ function loginBloquear() {
   if (tela) {
     tela.style.display = 'flex';
     tela.style.opacity = '1';
+    loginFecharReset();
     const campo = document.getElementById('login-senha');
     if (campo) { campo.value = ''; setTimeout(()=>campo.focus(), 100); }
   }
@@ -3306,7 +3351,7 @@ function loginBloquear() {
 // ── Reinicia o timer de inatividade ──
 function _reiniciarBloqueio() {
   if (_bloqueioTimer) clearTimeout(_bloqueioTimer);
-  _bloqueioTimer = setTimeout(loginBloquear, TEMPO_BLOQUEIO);
+  _bloqueioTimer = setTimeout(loginBloquear, _getTempoBloqueio());
 }
 
 // ── Monitora atividade do usuário ──
@@ -3315,6 +3360,69 @@ function _reiniciarBloqueio() {
     if (sessionStorage.getItem('elos_logado')==='1') _reiniciarBloqueio();
   }, { passive: true });
 });
+
+// ── Mostra painel de reset ──
+function loginMostrarReset() {
+  const painel = document.getElementById('login-reset-painel');
+  if (painel) {
+    painel.style.display = 'block';
+    const c = document.getElementById('reset-codigo');
+    if (c) setTimeout(()=>c.focus(), 100);
+  }
+}
+
+// ── Fecha painel de reset ──
+function loginFecharReset() {
+  const painel = document.getElementById('login-reset-painel');
+  if (painel) painel.style.display = 'none';
+  ['reset-codigo','reset-nova','reset-conf'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  ['reset-erro','reset-ok'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+}
+
+// ── Confirma redefinição de senha ──
+function loginResetConfirmar() {
+  const codigo = (document.getElementById('reset-codigo')?.value || '').trim().toUpperCase();
+  const nova   = (document.getElementById('reset-nova')?.value  || '').trim();
+  const conf   = (document.getElementById('reset-conf')?.value  || '').trim();
+  const erroEl = document.getElementById('reset-erro');
+  const okEl   = document.getElementById('reset-ok');
+
+  const mostrarErro = (msg) => {
+    erroEl.textContent = '❌ ' + msg;
+    erroEl.style.display = 'block';
+    okEl.style.display = 'none';
+  };
+
+  erroEl.style.display = 'none';
+  okEl.style.display = 'none';
+
+  if (!codigo) { mostrarErro('Digite o código de recuperação.'); return; }
+  if (codigo !== CODIGO_RESET) { mostrarErro('Código de recuperação incorreto.'); return; }
+  if (!nova) { mostrarErro('Digite a nova senha.'); return; }
+  if (nova.length < 4) { mostrarErro('A senha deve ter pelo menos 4 caracteres.'); return; }
+  if (nova !== conf) { mostrarErro('As senhas não coincidem.'); return; }
+
+  // Salva a nova senha
+  _lsSet('senha_acesso', nova);
+  _lsSet('senha_alterada', true);
+
+  okEl.textContent = '✅ Senha redefinida com sucesso! Faça login com a nova senha.';
+  okEl.style.display = 'block';
+  erroEl.style.display = 'none';
+
+  // Limpa campos e foca no login após 2s
+  setTimeout(() => {
+    loginFecharReset();
+    const campo = document.getElementById('login-senha');
+    if (campo) { campo.value = ''; campo.focus(); }
+  }, 2200);
+}
 
 // ── Animação de shake ──
 const styleShake = document.createElement('style');
