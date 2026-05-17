@@ -681,10 +681,13 @@ input[type="text"],input:not([type]),textarea { text-transform:uppercase; }
 
         <!-- ABAS -->
         <div class="pron-tabs" id="pron-tabs-bar">
-          <div class="pron-tab active" onclick="pronTab('evolucao')">📝 Nova Consulta</div>
+          <div class="pron-tab active" onclick="pronTab('evolucao')">📝 Consulta</div>
           <div class="pron-tab" onclick="pronTab('historico')">📅 Histórico</div>
           <div class="pron-tab" onclick="pronTab('antecedentes')">📜 Antecedentes</div>
-          <div class="pron-tab" onclick="pronTab('exames')">🔬 Exames</div>
+          <div class="pron-tab" onclick="pronTab('solicitacoes')">🧪 Solicitar Exames</div>
+          <div class="pron-tab" onclick="pronTab('receita')">💊 Receita</div>
+          <div class="pron-tab" onclick="pronTab('documentos')">📄 Documentos</div>
+          <div class="pron-tab" onclick="pronTab('exames')">🔬 Resultados</div>
         </div>
 
         <!-- ABA: NOVA CONSULTA -->
@@ -834,6 +837,303 @@ input[type="text"],input:not([type]),textarea { text-transform:uppercase; }
             </div>
           </div>
           <div id="ex-lista"></div>
+        </div>
+
+
+        <!-- ABA: SOLICITAR EXAMES -->
+        <div id="pron-tab-solicitacoes" style="display:none">
+          <div class="card">
+            <div class="card-title"><span class="ct-icon">🧪</span> Solicitação de Exames</div>
+            <div class="g3" style="margin-bottom:10px">
+              <div class="fg"><label>Data</label><input type="date" id="sol-dt"></div>
+              <div class="fg"><label>Caráter</label>
+                <select id="sol-carater">
+                  <option>Eletivo</option><option>Urgência</option>
+                </select>
+              </div>
+              <div class="fg"><label>Convênio / Pagamento</label>
+                <select id="sol-conv">
+                  <option>Particular</option><option>SUS</option><option>Unimed</option><option>Bradesco Saúde</option><option>Amil</option><option>SulAmérica</option><option>Hapvida</option><option>Outro</option>
+                </select>
+              </div>
+            </div>
+            <div class="fg" style="margin-bottom:6px"><label>Hipótese Diagnóstica / CID</label><input type="text" id="sol-cid" placeholder="Ex: Diabetes mellitus tipo 2 — E11"></div>
+
+            <!-- LABORATORIAIS -->
+            <div class="pron-section-label">🩸 Exames Laboratoriais</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px;margin-bottom:12px" id="sol-lab-grid">
+              <!-- HEMATOLOGIA -->
+              <div class="sol-grupo">
+                <div class="sol-grupo-titulo">Hematologia</div>
+                <label class="sol-check"><input type="checkbox" value="Hemograma completo"> Hemograma completo</label>
+                <label class="sol-check"><input type="checkbox" value="Coagulograma (TP, TTPa)"> Coagulograma</label>
+                <label class="sol-check"><input type="checkbox" value="VHS"> VHS</label>
+                <label class="sol-check"><input type="checkbox" value="PCR (Proteína C-Reativa)"> PCR</label>
+                <label class="sol-check"><input type="checkbox" value="Ferro sérico + Ferritina"> Ferro + Ferritina</label>
+                <label class="sol-check"><input type="checkbox" value="Vitamina B12"> Vitamina B12</label>
+                <label class="sol-check"><input type="checkbox" value="Ácido fólico"> Ácido fólico</label>
+              </div>
+              <!-- GLICEMIA -->
+              <div class="sol-grupo">
+                <div class="sol-grupo-titulo">Glicemia / Diabetes</div>
+                <label class="sol-check"><input type="checkbox" value="Glicemia em jejum"> Glicemia em jejum</label>
+                <label class="sol-check"><input type="checkbox" value="Hemoglobina glicada (HbA1c)"> HbA1c</label>
+                <label class="sol-check"><input type="checkbox" value="Curva glicêmica (TOTG 75g)"> TOTG 75g</label>
+                <label class="sol-check"><input type="checkbox" value="Insulina em jejum"> Insulina em jejum</label>
+                <label class="sol-check"><input type="checkbox" value="Peptídeo C"> Peptídeo C</label>
+              </div>
+              <!-- LIPÍDIOS -->
+              <div class="sol-grupo">
+                <div class="sol-grupo-titulo">Lipídios</div>
+                <label class="sol-check"><input type="checkbox" value="Lipidograma completo (CT, HDL, LDL, VLDL, TG)"> Lipidograma completo</label>
+                <label class="sol-check"><input type="checkbox" value="Colesterol total"> Colesterol total</label>
+                <label class="sol-check"><input type="checkbox" value="HDL-colesterol"> HDL</label>
+                <label class="sol-check"><input type="checkbox" value="LDL-colesterol (calculado)"> LDL</label>
+                <label class="sol-check"><input type="checkbox" value="Triglicerídeos"> Triglicerídeos</label>
+              </div>
+              <!-- FUNÇÃO RENAL -->
+              <div class="sol-grupo">
+                <div class="sol-grupo-titulo">Função Renal</div>
+                <label class="sol-check"><input type="checkbox" value="Creatinina + Ureia"> Creatinina + Ureia</label>
+                <label class="sol-check"><input type="checkbox" value="Ácido úrico"> Ácido úrico</label>
+                <label class="sol-check"><input type="checkbox" value="Microalbuminúria (spot)"> Microalbuminúria</label>
+                <label class="sol-check"><input type="checkbox" value="Clearance de creatinina"> Clearance creatinina</label>
+                <label class="sol-check"><input type="checkbox" value="Eletrólitos (Na, K, Cl)"> Eletrólitos</label>
+              </div>
+              <!-- FUNÇÃO HEPÁTICA -->
+              <div class="sol-grupo">
+                <div class="sol-grupo-titulo">Função Hepática</div>
+                <label class="sol-check"><input type="checkbox" value="TGO (AST) + TGP (ALT)"> TGO + TGP</label>
+                <label class="sol-check"><input type="checkbox" value="Gama GT (GGT)"> Gama GT</label>
+                <label class="sol-check"><input type="checkbox" value="Fosfatase alcalina"> Fosfatase alcalina</label>
+                <label class="sol-check"><input type="checkbox" value="Bilirrubinas (total e frações)"> Bilirrubinas</label>
+                <label class="sol-check"><input type="checkbox" value="Albumina sérica"> Albumina</label>
+              </div>
+              <!-- TIREOIDE -->
+              <div class="sol-grupo">
+                <div class="sol-grupo-titulo">Tireoide</div>
+                <label class="sol-check"><input type="checkbox" value="TSH"> TSH</label>
+                <label class="sol-check"><input type="checkbox" value="T4 livre"> T4 livre</label>
+                <label class="sol-check"><input type="checkbox" value="T3 livre"> T3 livre</label>
+                <label class="sol-check"><input type="checkbox" value="Anti-TPO"> Anti-TPO</label>
+                <label class="sol-check"><input type="checkbox" value="Anti-Tireoglobulina"> Anti-Tireoglobulina</label>
+              </div>
+              <!-- URINA / FEZES -->
+              <div class="sol-grupo">
+                <div class="sol-grupo-titulo">Urina / Fezes</div>
+                <label class="sol-check"><input type="checkbox" value="Urina 1 (EAS)"> Urina 1 (EAS)</label>
+                <label class="sol-check"><input type="checkbox" value="Urocultura com antibiograma"> Urocultura</label>
+                <label class="sol-check"><input type="checkbox" value="Parasitológico de fezes (3 amostras)"> Parasitológico</label>
+                <label class="sol-check"><input type="checkbox" value="Sangue oculto nas fezes"> Sangue oculto</label>
+                <label class="sol-check"><input type="checkbox" value="Coprocultura"> Coprocultura</label>
+              </div>
+              <!-- SOROLOGIAS -->
+              <div class="sol-grupo">
+                <div class="sol-grupo-titulo">Sorologias</div>
+                <label class="sol-check"><input type="checkbox" value="HIV (Anti-HIV 1 e 2)"> HIV</label>
+                <label class="sol-check"><input type="checkbox" value="VDRL (Sífilis)"> VDRL (Sífilis)</label>
+                <label class="sol-check"><input type="checkbox" value="HBsAg (Hepatite B)"> HBsAg (Hepatite B)</label>
+                <label class="sol-check"><input type="checkbox" value="Anti-HCV (Hepatite C)"> Anti-HCV</label>
+                <label class="sol-check"><input type="checkbox" value="Anti-HAV IgM e IgG (Hepatite A)"> Anti-HAV</label>
+                <label class="sol-check"><input type="checkbox" value="Toxoplasmose IgM e IgG"> Toxoplasmose</label>
+                <label class="sol-check"><input type="checkbox" value="Rubéola IgM e IgG"> Rubéola</label>
+                <label class="sol-check"><input type="checkbox" value="CMV IgM e IgG"> CMV</label>
+                <label class="sol-check"><input type="checkbox" value="HTLV I e II"> HTLV</label>
+              </div>
+              <!-- CARDIOVASCULAR -->
+              <div class="sol-grupo">
+                <div class="sol-grupo-titulo">Cardiovascular</div>
+                <label class="sol-check"><input type="checkbox" value="Troponina I"> Troponina I</label>
+                <label class="sol-check"><input type="checkbox" value="CK-MB"> CK-MB</label>
+                <label class="sol-check"><input type="checkbox" value="BNP / NT-proBNP"> BNP/NT-proBNP</label>
+                <label class="sol-check"><input type="checkbox" value="Homocisteína"> Homocisteína</label>
+                <label class="sol-check"><input type="checkbox" value="PCR ultrassensível"> PCR ultrassensível</label>
+              </div>
+              <!-- HORMÔNIOS -->
+              <div class="sol-grupo">
+                <div class="sol-grupo-titulo">Hormônios</div>
+                <label class="sol-check"><input type="checkbox" value="FSH + LH"> FSH + LH</label>
+                <label class="sol-check"><input type="checkbox" value="Estradiol"> Estradiol</label>
+                <label class="sol-check"><input type="checkbox" value="Progesterona"> Progesterona</label>
+                <label class="sol-check"><input type="checkbox" value="Testosterona total"> Testosterona total</label>
+                <label class="sol-check"><input type="checkbox" value="Prolactina"> Prolactina</label>
+                <label class="sol-check"><input type="checkbox" value="Beta-HCG quantitativo"> Beta-HCG</label>
+                <label class="sol-check"><input type="checkbox" value="Cortisol basal (8h)"> Cortisol</label>
+                <label class="sol-check"><input type="checkbox" value="Vitamina D (25-OH)"> Vitamina D</label>
+                <label class="sol-check"><input type="checkbox" value="PTH (Paratormônio)"> PTH</label>
+                <label class="sol-check"><input type="checkbox" value="PSA total e livre"> PSA total e livre</label>
+              </div>
+            </div>
+
+            <!-- IMAGEM -->
+            <div class="pron-section-label">📷 Exames de Imagem</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px;margin-bottom:12px">
+              <div class="sol-grupo">
+                <div class="sol-grupo-titulo">Radiologia</div>
+                <label class="sol-check"><input type="checkbox" value="Raio-X de tórax (PA e perfil)"> RX Tórax</label>
+                <label class="sol-check"><input type="checkbox" value="Raio-X de coluna lombar (AP e perfil)"> RX Coluna Lombar</label>
+                <label class="sol-check"><input type="checkbox" value="Raio-X de coluna cervical"> RX Coluna Cervical</label>
+                <label class="sol-check"><input type="checkbox" value="Raio-X de joelhos (AP bilateral em carga)"> RX Joelhos</label>
+                <label class="sol-check"><input type="checkbox" value="Raio-X de mãos e punhos"> RX Mãos/Punhos</label>
+              </div>
+              <div class="sol-grupo">
+                <div class="sol-grupo-titulo">Ultrassonografia</div>
+                <label class="sol-check"><input type="checkbox" value="USG de abdome total"> USG Abdome total</label>
+                <label class="sol-check"><input type="checkbox" value="USG de abdome superior"> USG Abdome superior</label>
+                <label class="sol-check"><input type="checkbox" value="USG pélvica (transvaginal)"> USG Pélvica TV</label>
+                <label class="sol-check"><input type="checkbox" value="USG pélvica (suprapúbica)"> USG Pélvica SP</label>
+                <label class="sol-check"><input type="checkbox" value="USG de tireoide"> USG Tireoide</label>
+                <label class="sol-check"><input type="checkbox" value="USG de mama bilateral"> USG Mama bilateral</label>
+                <label class="sol-check"><input type="checkbox" value="USG de vias urinárias"> USG Vias urinárias</label>
+                <label class="sol-check"><input type="checkbox" value="USG Doppler venoso MMII"> Doppler venoso MMII</label>
+                <label class="sol-check"><input type="checkbox" value="USG obstétrica morfológica 1º tri"> USG Morfológica 1ºT</label>
+                <label class="sol-check"><input type="checkbox" value="USG obstétrica morfológica 2º tri"> USG Morfológica 2ºT</label>
+              </div>
+              <div class="sol-grupo">
+                <div class="sol-grupo-titulo">TC / RM / Outros</div>
+                <label class="sol-check"><input type="checkbox" value="Tomografia computadorizada de crânio s/c"> TC Crânio</label>
+                <label class="sol-check"><input type="checkbox" value="Tomografia computadorizada de tórax"> TC Tórax</label>
+                <label class="sol-check"><input type="checkbox" value="Tomografia computadorizada de abdome e pelve c/c"> TC Abdome/Pelve</label>
+                <label class="sol-check"><input type="checkbox" value="Ressonância magnética de crânio"> RM Crânio</label>
+                <label class="sol-check"><input type="checkbox" value="Ressonância magnética de coluna lombar"> RM Coluna Lombar</label>
+                <label class="sol-check"><input type="checkbox" value="Mamografia bilateral"> Mamografia</label>
+                <label class="sol-check"><input type="checkbox" value="Densitometria óssea (coluna e fêmur)"> Densitometria óssea</label>
+                <label class="sol-check"><input type="checkbox" value="Ecocardiograma transtorácico"> Ecocardiograma</label>
+                <label class="sol-check"><input type="checkbox" value="ECG de repouso 12 derivações"> ECG 12 derivações</label>
+                <label class="sol-check"><input type="checkbox" value="Holter 24 horas"> Holter 24h</label>
+                <label class="sol-check"><input type="checkbox" value="MAPA 24 horas"> MAPA 24h</label>
+                <label class="sol-check"><input type="checkbox" value="Teste ergométrico"> Teste ergométrico</label>
+              </div>
+              <div class="sol-grupo">
+                <div class="sol-grupo-titulo">Preventivos</div>
+                <label class="sol-check"><input type="checkbox" value="Colpocitologia oncótica (Papanicolau)"> Papanicolau</label>
+                <label class="sol-check"><input type="checkbox" value="Colonoscopia"> Colonoscopia</label>
+                <label class="sol-check"><input type="checkbox" value="Endoscopia digestiva alta"> Endoscopia</label>
+                <label class="sol-check"><input type="checkbox" value="Espirometria"> Espirometria</label>
+              </div>
+            </div>
+
+            <!-- OBSERVAÇÕES -->
+            <div class="fg" style="margin-bottom:12px">
+              <label>Observações / Preparo especial</label>
+              <textarea id="sol-obs" rows="2" placeholder="Ex: Jejum de 12h para exames laboratoriais. Bexiga cheia para USG pélvica."></textarea>
+            </div>
+            <div class="btn-row">
+              <button class="btn btn-verde" onclick="solImprimir()">🖨️ Imprimir Solicitação</button>
+              <button class="btn btn-ghost btn-sm" onclick="solLimpar()">🗑 Limpar seleção</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ABA: RECEITA -->
+        <div id="pron-tab-receita" style="display:none">
+          <div class="card">
+            <div class="card-title"><span class="ct-icon">💊</span> Receituário</div>
+            <div class="g3" style="margin-bottom:10px">
+              <div class="fg"><label>Data</label><input type="date" id="rec-dt"></div>
+              <div class="fg"><label>Tipo de Receita</label>
+                <select id="rec-tipo" onchange="recTipoChange()">
+                  <option value="comum">Receita Comum (branca)</option>
+                  <option value="especial">Receita de Controle Especial (azul — C1)</option>
+                  <option value="amarela">Receita Amarela (A2/B1/B2)</option>
+                </select>
+              </div>
+              <div class="fg"><label>Via</label>
+                <select id="rec-via">
+                  <option>Oral</option><option>Sublingual</option><option>Tópica</option><option>Inalatória</option><option>Intramuscular</option><option>Intravenosa</option><option>Subcutânea</option><option>Retal</option><option>Vaginal</option><option>Ocular</option><option>Nasal</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Medicamentos -->
+            <div id="rec-meds-lista">
+              <div class="rec-med-item" id="rec-med-0">
+                <div class="pron-section-label" style="margin-top:0">Medicamento 1</div>
+                <div class="g2" style="margin-bottom:6px">
+                  <div class="fg"><label>Medicamento</label><input type="text" class="rec-nome" placeholder="Ex: AMOXICILINA"></div>
+                  <div class="fg"><label>Dose / Apresentação</label><input type="text" class="rec-dose" placeholder="Ex: 500MG — CÁPSULA"></div>
+                </div>
+                <div class="g2" style="margin-bottom:6px">
+                  <div class="fg"><label>Posologia</label><input type="text" class="rec-pos" placeholder="Ex: TOMAR 1 CÁPSULA A CADA 8 HORAS"></div>
+                  <div class="fg"><label>Duração / Quantidade</label><input type="text" class="rec-dur" placeholder="Ex: POR 7 DIAS (21 CÁPSULAS)"></div>
+                </div>
+              </div>
+            </div>
+            <div class="btn-row" style="margin-bottom:12px">
+              <button class="btn btn-ghost btn-sm" onclick="recAddMed()">+ Adicionar medicamento</button>
+            </div>
+
+            <div class="fg" style="margin-bottom:12px">
+              <label>Orientações adicionais</label>
+              <textarea id="rec-obs" rows="2" placeholder="Ex: Retornar se não houver melhora em 48h. Evitar bebidas alcoólicas durante o tratamento."></textarea>
+            </div>
+            <div id="rec-aviso-especial" style="display:none;background:#fff3cd;border-radius:8px;padding:10px 14px;font-size:.8rem;color:#856404;margin-bottom:12px">
+              ⚠️ <strong>Receita de Controle Especial</strong> — Requer 2 vias impressas, assinatura e carimbo. Válida por 30 dias.
+            </div>
+            <div class="btn-row">
+              <button class="btn btn-verde" onclick="recImprimir()">🖨️ Imprimir Receita</button>
+              <button class="btn btn-ghost btn-sm" onclick="recLimpar()">🗑 Limpar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ABA: DOCUMENTOS -->
+        <div id="pron-tab-documentos" style="display:none">
+          <div class="card">
+            <div class="card-title"><span class="ct-icon">📄</span> Documentos Médicos</div>
+
+            <!-- ATESTADO -->
+            <div style="border:1.5px solid var(--cinza2);border-radius:10px;padding:16px;margin-bottom:14px">
+              <div style="font-weight:700;color:var(--verde);margin-bottom:10px">📋 Atestado Médico</div>
+              <div class="g3" style="margin-bottom:8px">
+                <div class="fg"><label>Data</label><input type="date" id="at-dt"></div>
+                <div class="fg"><label>Dias de afastamento</label><input type="number" id="at-dias" placeholder="Ex: 2" min="1"></div>
+                <div class="fg"><label>CID (opcional)</label><input type="text" id="at-cid" placeholder="Ex: J06.9"></div>
+              </div>
+              <div class="fg" style="margin-bottom:8px"><label>Motivo (opcional — pode deixar em branco)</label><input type="text" id="at-motivo" placeholder="Ex: tratamento de saúde — ou deixar em branco"></div>
+              <div class="fg" style="margin-bottom:8px"><label>Período de afastamento</label><input type="text" id="at-periodo" placeholder="Ex: 17/05/2026 a 18/05/2026"></div>
+              <button class="btn btn-verde btn-sm" onclick="atImprimir()">🖨️ Imprimir Atestado</button>
+            </div>
+
+            <!-- DECLARAÇÃO DE COMPARECIMENTO -->
+            <div style="border:1.5px solid var(--cinza2);border-radius:10px;padding:16px;margin-bottom:14px">
+              <div style="font-weight:700;color:var(--verde);margin-bottom:10px">🕐 Declaração de Comparecimento</div>
+              <div class="g3" style="margin-bottom:8px">
+                <div class="fg"><label>Data da consulta</label><input type="date" id="dec-dt"></div>
+                <div class="fg"><label>Horário de entrada</label><input type="time" id="dec-entrada"></div>
+                <div class="fg"><label>Horário de saída</label><input type="time" id="dec-saida"></div>
+              </div>
+              <button class="btn btn-verde btn-sm" onclick="decImprimir()">🖨️ Imprimir Declaração</button>
+            </div>
+
+            <!-- ENCAMINHAMENTO -->
+            <div style="border:1.5px solid var(--cinza2);border-radius:10px;padding:16px;margin-bottom:14px">
+              <div style="font-weight:700;color:var(--verde);margin-bottom:10px">🏥 Encaminhamento</div>
+              <div class="g2" style="margin-bottom:8px">
+                <div class="fg"><label>Especialidade</label>
+                  <select id="enc-espec">
+                    <option>Cardiologia</option><option>Endocrinologia</option><option>Ginecologia</option><option>Ortopedia</option><option>Neurologia</option><option>Psiquiatria</option><option>Dermatologia</option><option>Oftalmologia</option><option>Otorrinolaringologia</option><option>Urologia</option><option>Gastroenterologia</option><option>Pneumologia</option><option>Reumatologia</option><option>Nefrologia</option><option>Hematologia</option><option>Infectologia</option><option>Oncologia</option><option>Cirurgia Geral</option><option>Cirurgia Vascular</option><option>Fisioterapia</option><option>Nutrição</option><option>Psicologia</option><option>Outra especialidade</option>
+                  </select>
+                </div>
+                <div class="fg"><label>CID / Hipótese</label><input type="text" id="enc-cid" placeholder="Ex: Hipertensão arterial — I10"></div>
+              </div>
+              <div class="fg" style="margin-bottom:8px"><label>Motivo do encaminhamento</label><textarea id="enc-motivo" rows="3" placeholder="Descreva o motivo clínico do encaminhamento..."></textarea></div>
+              <div class="fg" style="margin-bottom:8px"><label>Prioridade</label>
+                <select id="enc-prior">
+                  <option>Eletivo (sem urgência)</option><option>Prioritário (em até 30 dias)</option><option>Urgência</option>
+                </select>
+              </div>
+              <button class="btn btn-verde btn-sm" onclick="encImprimir()">🖨️ Imprimir Encaminhamento</button>
+            </div>
+
+            <!-- RELATÓRIO MÉDICO -->
+            <div style="border:1.5px solid var(--cinza2);border-radius:10px;padding:16px">
+              <div style="font-weight:700;color:var(--verde);margin-bottom:10px">📝 Relatório Médico</div>
+              <div class="fg" style="margin-bottom:8px"><label>Finalidade</label><input type="text" id="rel-finalidade" placeholder="Ex: Para fins de concessão de benefício, para apresentar ao empregador..."></div>
+              <div class="fg" style="margin-bottom:8px"><label>Texto do relatório</label><textarea id="rel-texto" rows="6" placeholder="Descreva o quadro clínico, diagnóstico, tratamento em curso e informações relevantes..."></textarea></div>
+              <button class="btn btn-verde btn-sm" onclick="relImprimir()">🖨️ Imprimir Relatório</button>
+            </div>
+          </div>
         </div>
 
       </div><!-- /pron-area -->
@@ -2209,6 +2509,8 @@ document.querySelectorAll('.modal-bg').forEach(m => m.addEventListener('click', 
 
 /* ═══ CONFIGURAÇÕES ═══ */
 function cfgCarregar() {
+  // Iniciar Firebase automaticamente se ainda não iniciou
+  if (!_fbReady) fbInit();
   const c = cfg();
   const m = {nome:'cfg-nome',crm:'cfg-crm',espec:'cfg-espec',rqe:'cfg-rqe',clinica:'cfg-clinica',cnpj:'cfg-cnpj',end:'cfg-end',tel:'cfg-tel',rodape:'cfg-rodape'};
   Object.entries(m).forEach(([k,id])=>{ const el=document.getElementById(id); if(el&&c[k]) el.value=c[k]; });
@@ -2234,7 +2536,15 @@ function cfgSalvar() {
 
 /* ═══ FIREBASE CONFIG ═══ */
 function fbCarregar() {
-  const fb = _lsGet('firebase_config') || {};
+  const cfg_embutida = {
+    apiKey: "AIzaSyANpogsrzyQ_bpsZydpruH8OGg0IlT0Glk",
+    authDomain: "clinica-elos.firebaseapp.com",
+    projectId: "clinica-elos",
+    storageBucket: "clinica-elos.firebasestorage.app",
+    messagingSenderId: "636180119896",
+    appId: "1:636180119896:web:b825f48f5632b4cfb8a52d"
+  };
+  const fb = _lsGet('firebase_config') || cfg_embutida;
   ['apiKey','authDomain','projectId','storageBucket','messagingSenderId','appId'].forEach(k=>{
     const el = document.getElementById('fb-'+k);
     if (el && fb[k]) el.value = fb[k];
@@ -2266,6 +2576,9 @@ function fbDesconectar() {
   fbCarregar();
 }
 async function fbTestarConexao() {
+  if (!_fbReady) { await fbInit(); } else { _fbStatus('online'); }
+  fbCarregar();
+}
 
 function cfgAlterarSenha() {
   const nova = document.getElementById('cfg-senha-nova').value.trim();
@@ -3018,6 +3331,277 @@ document.head.appendChild(styleShake);
 
 // Inicializar login ao carregar
 loginVerificar();
+
+
+/* ═══ SOLICITAÇÃO DE EXAMES ═══ */
+function pronTab(t) {
+  const abas = ['evolucao','historico','antecedentes','solicitacoes','receita','documentos','exames'];
+  abas.forEach(x => {
+    const el = document.getElementById('pron-tab-'+x);
+    if (el) el.style.display = x===t ? 'block' : 'none';
+  });
+  document.querySelectorAll('.pron-tab').forEach((el,i) => {
+    el.classList.toggle('active', abas[i]===t);
+  });
+  if (t==='historico') pronRenderHist();
+  if (t==='exames') exRenderLista();
+  if (t==='antecedentes') pronCarrAnt();
+  if (t==='solicitacoes') { const el=document.getElementById('sol-dt'); if(el&&!el.value) el.value=hoje(); }
+  if (t==='receita') { const el=document.getElementById('rec-dt'); if(el&&!el.value) el.value=hoje(); }
+  if (t==='documentos') {
+    ['at-dt','dec-dt'].forEach(id=>{ const el=document.getElementById(id); if(el&&!el.value) el.value=hoje(); });
+  }
+}
+
+function solImprimir() {
+  if (!pronPacAtual) return;
+  const p = pronPacAtual;
+  const idade = idadeAnos(p.nasc);
+  const c = cfg();
+  const checks = document.querySelectorAll('#pron-tab-solicitacoes input[type=checkbox]:checked');
+  if (!checks.length) { alert('Selecione pelo menos um exame.'); return; }
+  const lab = [], img = [];
+  checks.forEach(ch => {
+    const v = ch.value;
+    if (v.startsWith('Raio') || v.startsWith('USG') || v.startsWith('TC') || v.startsWith('Res') ||
+        v.startsWith('Mam') || v.startsWith('Dens') || v.startsWith('Eco') || v.startsWith('ECG') ||
+        v.startsWith('Hol') || v.startsWith('MAP') || v.startsWith('Tes') || v.startsWith('Col') ||
+        v.startsWith('End') || v.startsWith('Esp') || v.startsWith('Colo')) {
+      img.push(v);
+    } else { lab.push(v); }
+  });
+  const carater = document.getElementById('sol-carater').value;
+  const conv = document.getElementById('sol-conv').value;
+  const cid = document.getElementById('sol-cid').value;
+  const obs = document.getElementById('sol-obs').value;
+  const dt = document.getElementById('sol-dt').value;
+
+  let html = docHdr();
+  html += `<div class="doc-tipo">Solicitação de Exames</div>`;
+  html += `<div style="display:flex;justify-content:space-between;margin-bottom:8px">
+    <div><b>PACIENTE:</b> ${esc(p.nome)}${idade?' — '+idade+' anos':''}</div>
+    <div><b>DATA:</b> ${br(dt||hoje())}</div>
+  </div>`;
+  if (p.nasc) html += `<div class="campo"><b>NASCIMENTO:</b> ${br(p.nasc)}</div>`;
+  html += `<div class="campo"><b>CARÁTER:</b> ${carater} &nbsp;&nbsp; <b>CONVÊNIO:</b> ${conv}</div>`;
+  if (cid) html += `<div class="campo"><b>HIPÓTESE DIAGNÓSTICA / CID:</b> ${esc(cid)}</div>`;
+  html += '<hr>';
+  if (lab.length) {
+    html += '<div style="font-weight:700;margin:10px 0 6px;font-size:.9rem">EXAMES LABORATORIAIS</div><ol style="margin:0;padding-left:18px">';
+    lab.forEach(e => html += `<li style="margin-bottom:3px;font-size:.85rem">${esc(e)}</li>`);
+    html += '</ol>';
+  }
+  if (img.length) {
+    html += '<div style="font-weight:700;margin:12px 0 6px;font-size:.9rem">EXAMES DE IMAGEM E OUTROS</div><ol style="margin:0;padding-left:18px">';
+    img.forEach(e => html += `<li style="margin-bottom:3px;font-size:.85rem">${esc(e)}</li>`);
+    html += '</ol>';
+  }
+  if (obs) html += `<div style="margin-top:12px;font-size:.82rem"><b>OBSERVAÇÕES:</b> ${esc(obs)}</div>`;
+  html += docAss();
+  abrirJanelaPrint(html);
+}
+
+function solLimpar() {
+  document.querySelectorAll('#pron-tab-solicitacoes input[type=checkbox]').forEach(c => c.checked=false);
+  ['sol-cid','sol-obs'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+}
+
+/* ═══ RECEITA ═══ */
+let _recMedCount = 1;
+function recAddMed() {
+  const lista = document.getElementById('rec-meds-lista');
+  const n = _recMedCount++;
+  const div = document.createElement('div');
+  div.className = 'rec-med-item';
+  div.id = 'rec-med-'+n;
+  div.innerHTML = `<div class="pron-section-label" style="margin-top:0;display:flex;justify-content:space-between">
+    <span>Medicamento ${n+1}</span>
+    <span style="cursor:pointer;color:var(--vermelho);font-size:.75rem" onclick="this.closest('.rec-med-item').remove()">✕ Remover</span>
+  </div>
+  <div class="g2" style="margin-bottom:6px">
+    <div class="fg"><label>Medicamento</label><input type="text" class="rec-nome" placeholder="Ex: LOSARTANA"></div>
+    <div class="fg"><label>Dose / Apresentação</label><input type="text" class="rec-dose" placeholder="Ex: 50MG — COMPRIMIDO"></div>
+  </div>
+  <div class="g2">
+    <div class="fg"><label>Posologia</label><input type="text" class="rec-pos" placeholder="Ex: TOMAR 1 COMPRIMIDO AO DIA"></div>
+    <div class="fg"><label>Duração / Quantidade</label><input type="text" class="rec-dur" placeholder="Ex: USO CONTÍNUO (30 comprimidos)"></div>
+  </div>`;
+  lista.appendChild(div);
+}
+
+function recTipoChange() {
+  const tipo = document.getElementById('rec-tipo').value;
+  const aviso = document.getElementById('rec-aviso-especial');
+  aviso.style.display = (tipo !== 'comum') ? 'block' : 'none';
+}
+
+function recImprimir() {
+  if (!pronPacAtual) return;
+  const p = pronPacAtual;
+  const idade = idadeAnos(p.nasc);
+  const tipo = document.getElementById('rec-tipo').value;
+  const dt = document.getElementById('rec-dt').value;
+  const obs = document.getElementById('rec-obs').value;
+  const items = document.querySelectorAll('.rec-med-item');
+  let meds = [];
+  items.forEach((item,i) => {
+    const nome = item.querySelector('.rec-nome')?.value.trim();
+    const dose = item.querySelector('.rec-dose')?.value.trim();
+    const pos  = item.querySelector('.rec-pos')?.value.trim();
+    const dur  = item.querySelector('.rec-dur')?.value.trim();
+    if (nome) meds.push({nome, dose, pos, dur, n: i+1});
+  });
+  if (!meds.length) { alert('Adicione pelo menos um medicamento.'); return; }
+
+  const tipoLabel = tipo==='comum'?'RECEITA MÉDICA':tipo==='especial'?'RECEITA DE CONTROLE ESPECIAL — VIA 1/2':'RECEITA ESPECIAL TIPO A';
+  let html = docHdr();
+  html += `<div class="doc-tipo">${tipoLabel}</div>`;
+  html += `<div style="display:flex;justify-content:space-between;margin-bottom:6px">
+    <div><b>PACIENTE:</b> ${esc(p.nome)}${idade?' — '+idade+' anos':''}</div>
+    <div><b>DATA:</b> ${br(dt||hoje())}</div>
+  </div>`;
+  if (p.nasc) html += `<div class="campo"><b>NASCIMENTO:</b> ${br(p.nasc)}</div>`;
+  html += '<hr style="margin:10px 0">';
+  meds.forEach(m => {
+    html += `<div style="margin-bottom:14px">
+      <div style="font-weight:700;font-size:.9rem">${m.n}. ${esc(m.nome)}${m.dose?' — '+esc(m.dose):''}</div>
+      ${m.pos?`<div style="font-size:.85rem;margin-left:12px;margin-top:3px">• ${esc(m.pos)}</div>`:''}
+      ${m.dur?`<div style="font-size:.85rem;margin-left:12px;color:#555">• ${esc(m.dur)}</div>`:''}
+    </div>`;
+  });
+  if (obs) html += `<hr style="margin:10px 0"><div style="font-size:.82rem"><b>ORIENTAÇÕES:</b> ${esc(obs)}</div>`;
+  html += docAss();
+  // Receita especial — imprime 2 vias
+  if (tipo !== 'comum') {
+    html += '<div style="page-break-before:always"></div>';
+    html += `<div style="text-align:center;font-weight:700;font-size:.8rem;margin-bottom:8px">[VIA 2 — FARMÁCIA]</div>`;
+    html += html.split('<div style="page-break-before:always"></div>')[0].replace(tipoLabel, tipoLabel+' — VIA 2/2');
+  }
+  abrirJanelaPrint(html);
+}
+
+function recLimpar() {
+  document.querySelectorAll('.rec-nome,.rec-dose,.rec-pos,.rec-dur').forEach(el => el.value='');
+  document.getElementById('rec-obs').value='';
+  // Remover meds extras
+  const extras = document.querySelectorAll('.rec-med-item:not(#rec-med-0)');
+  extras.forEach(el => el.remove());
+}
+
+/* ═══ ATESTADO ═══ */
+function atImprimir() {
+  if (!pronPacAtual) return;
+  const p = pronPacAtual;
+  const idade = idadeAnos(p.nasc);
+  const dias = document.getElementById('at-dias').value;
+  const cid = document.getElementById('at-cid').value;
+  const motivo = document.getElementById('at-motivo').value;
+  const periodo = document.getElementById('at-periodo').value;
+  const dt = document.getElementById('at-dt').value;
+  if (!dias) { alert('Informe o número de dias de afastamento.'); return; }
+  const Art = p.sexo==='F' ? 'a' : 'o';
+  let html = docHdr();
+  html += `<div class="doc-tipo">Atestado Médico</div>`;
+  html += `<div class="campo"><b>DATA:</b> ${br(dt||hoje())}</div>`;
+  html += '<hr>';
+  html += `<div style="font-size:.9rem;line-height:2;margin:20px 0;text-align:justify">
+    Atesto que ${Art} paciente <strong>${esc(p.nome)}</strong>${idade?', '+idade+' anos,':','} 
+    ${p.cpf?'CPF '+esc(p.cpf)+',':''} necessita de afastamento de suas atividades pelo período de 
+    <strong>${dias} (${extenso(parseInt(dias))}) dia${parseInt(dias)>1?'s':''}</strong>
+    ${periodo?' — '+esc(periodo):''},
+    ${motivo?'por '+esc(motivo.toLowerCase()+'.'):' por motivos de saúde.'}
+    ${cid?'<br><br>CID-10: <strong>'+esc(cid)+'</strong>':''}
+  </div>`;
+  html += docAss();
+  abrirJanelaPrint(html);
+}
+
+/* ═══ DECLARAÇÃO DE COMPARECIMENTO ═══ */
+function decImprimir() {
+  if (!pronPacAtual) return;
+  const p = pronPacAtual;
+  const dt = document.getElementById('dec-dt').value;
+  const entrada = document.getElementById('dec-entrada').value;
+  const saida = document.getElementById('dec-saida').value;
+  const idade = idadeAnos(p.nasc);
+  const Art = p.sexo==='F' ? 'a' : 'o';
+  let html = docHdr();
+  html += `<div class="doc-tipo">Declaração de Comparecimento</div>`;
+  html += '<hr>';
+  html += `<div style="font-size:.9rem;line-height:2;margin:20px 0;text-align:justify">
+    Declaro que ${Art} paciente <strong>${esc(p.nome)}</strong>${idade?', '+idade+' anos,':','}
+    ${p.cpf?'CPF '+esc(p.cpf)+',':''}
+    compareceu a esta clínica no dia <strong>${br(dt||hoje())}</strong>
+    ${entrada?'às <strong>'+entrada+'h</strong>':''}${saida?' e saiu às <strong>'+saida+'h</strong>':''},
+    para consulta médica.
+  </div>`;
+  html += `<div style="font-size:.8rem;color:#888;margin-top:20px">Esta declaração é emitida a pedido do(a) paciente para os fins que se fizerem necessários.</div>`;
+  html += docAss();
+  abrirJanelaPrint(html);
+}
+
+/* ═══ ENCAMINHAMENTO ═══ */
+function encImprimir() {
+  if (!pronPacAtual) return;
+  const p = pronPacAtual;
+  const idade = idadeAnos(p.nasc);
+  const espec = document.getElementById('enc-espec').value;
+  const cid = document.getElementById('enc-cid').value;
+  const motivo = document.getElementById('enc-motivo').value;
+  const prior = document.getElementById('enc-prior').value;
+  if (!motivo) { alert('Descreva o motivo do encaminhamento.'); return; }
+  const Art = p.sexo==='F' ? 'a' : 'o';
+  let html = docHdr();
+  html += `<div class="doc-tipo">Encaminhamento Médico</div>`;
+  html += `<div style="display:flex;justify-content:space-between;margin-bottom:6px">
+    <div><b>ESPECIALIDADE SOLICITADA:</b> ${esc(espec)}</div>
+    <div><b>DATA:</b> ${br(hoje())}</div>
+  </div>`;
+  html += '<hr>';
+  html += `<div class="campo"><b>PACIENTE:</b> ${esc(p.nome)}${idade?' — '+idade+' anos':''}</div>`;
+  if (p.nasc) html += `<div class="campo"><b>NASCIMENTO:</b> ${br(p.nasc)}</div>`;
+  if (p.cpf) html += `<div class="campo"><b>CPF:</b> ${esc(p.cpf)}</div>`;
+  if (cid) html += `<div class="campo"><b>HIPÓTESE DIAGNÓSTICA / CID:</b> ${esc(cid)}</div>`;
+  html += `<div class="campo"><b>PRIORIDADE:</b> ${esc(prior)}</div>`;
+  html += '<hr>';
+  html += `<div style="font-size:.88rem;line-height:1.8;margin:12px 0">
+    <b>MOTIVO DO ENCAMINHAMENTO:</b><br>
+    ${esc(motivo)}
+  </div>`;
+  html += `<div style="font-size:.82rem;margin-top:12px">Solicito avaliação e conduta especializada. Agradeço retorno com relatório de atendimento.</div>`;
+  html += docAss();
+  abrirJanelaPrint(html);
+}
+
+/* ═══ RELATÓRIO MÉDICO ═══ */
+function relImprimir() {
+  if (!pronPacAtual) return;
+  const p = pronPacAtual;
+  const idade = idadeAnos(p.nasc);
+  const finalidade = document.getElementById('rel-finalidade').value;
+  const texto = document.getElementById('rel-texto').value;
+  if (!texto) { alert('Preencha o texto do relatório.'); return; }
+  let html = docHdr();
+  html += `<div class="doc-tipo">Relatório Médico</div>`;
+  html += `<div class="campo"><b>PACIENTE:</b> ${esc(p.nome)}${idade?' — '+idade+' anos':''}</div>`;
+  if (p.nasc) html += `<div class="campo"><b>NASCIMENTO:</b> ${br(p.nasc)}</div>`;
+  if (p.cpf) html += `<div class="campo"><b>CPF:</b> ${esc(p.cpf)}</div>`;
+  if (finalidade) html += `<div class="campo"><b>FINALIDADE:</b> ${esc(finalidade)}</div>`;
+  html += '<hr>';
+  html += `<div style="font-size:.88rem;line-height:1.9;margin:14px 0;text-align:justify;white-space:pre-wrap">${esc(texto)}</div>`;
+  html += `<div style="font-size:.8rem;color:#888;margin-top:16px">Emito o presente relatório a pedido do(a) paciente para os fins que se fizerem necessários.</div>`;
+  html += docAss();
+  abrirJanelaPrint(html);
+}
+
+/* Helper: número por extenso (dias) */
+function extenso(n) {
+  const m = ['zero','um','dois','três','quatro','cinco','seis','sete','oito','nove','dez',
+    'onze','doze','treze','quatorze','quinze','dezesseis','dezessete','dezoito','dezenove','vinte',
+    'vinte e um','vinte e dois','vinte e três','vinte e quatro','vinte e cinco','vinte e seis',
+    'vinte e sete','vinte e oito','vinte e nove','trinta'];
+  return n<=30 ? m[n] : n.toString();
+}
 
 topbarInit();
 dashAtualizar();
